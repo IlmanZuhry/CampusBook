@@ -5,21 +5,21 @@ $facilities = [
         "category" => "Aula",
         "capacity" => "200 orang",
         "status" => "Tersedia",
-        "image" => "https://images.unsplash.com/photo-1497366754035-f200968a6e72?auto=format&fit=crop&w=900&q=80"
+        "image" => "https://konten.usu.ac.id/storage/year/2025-07/satker/14/statis/facility/DSCF9306.JPG"
     ],
     [
         "name" => "Lab Komputer",
         "category" => "Laboratorium",
         "capacity" => "40 orang",
         "status" => "Tersedia",
-        "image" => "https://images.unsplash.com/photo-1581091226825-a6a2a5aee158?auto=format&fit=crop&w=900&q=80"
+        "image" => "https://dek.sch.id/wp-content/uploads/2022/02/03_42_47_2017_11_01_Lab._Komputer1.jpg"
     ],
     [
         "name" => "Lapangan Futsal",
         "category" => "Olahraga",
         "capacity" => "20 orang",
         "status" => "Tersedia",
-        "image" => "https://images.unsplash.com/photo-1574629810360-7efbbe195018?auto=format&fit=crop&w=900&q=80"
+        "image" => "https://jasakontraktorlapangan.id/wp-content/uploads/2023/02/Biaya-Buat-Lapangan-Futsal.jpg"
     ]
 ];
 ?>
@@ -406,7 +406,7 @@ $facilities = [
             </a>
 
             <p class="footer-copy">
-                © <?= date("Y") ?> CampusBook. Proyek E-Application.
+                © <?= date("Y") ?> CampusBook.
             </p>
 
             <div class="footer-links">
