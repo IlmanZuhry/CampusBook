@@ -95,6 +95,13 @@ $facilities = [
 
 <!-- HERO -->
 <section class="hero-section" id="beranda">
+    <div class="hero-photo">
+    <img
+        id="heroMainImage"
+        src="<?= htmlspecialchars($facilities[0]["image"]) ?>"
+        alt="<?= htmlspecialchars($facilities[0]["name"]) ?>"
+    >
+</div>
     <div class="container">
         <div class="row align-items-center g-5">
 
@@ -148,13 +155,7 @@ $facilities = [
                 <div class="hero-visual">
 
                     
-                    <div class="hero-photo">
-                        <img
-                            id="heroMainImage"
-                            src="<?= htmlspecialchars($facilities[0]["image"]) ?>"
-                            alt="<?= htmlspecialchars($facilities[0]["name"]) ?>"
-                        >
-                    </div>
+                    
 
 
                     <div class="facility-preview">
