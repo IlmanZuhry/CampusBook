@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: localhost
--- Waktu pembuatan: 22 Okt 2026 pada 03.09
+-- Waktu pembuatan: 22 Okt 2026 pada 16.01
 -- Versi server: 8.4.3
 -- Versi PHP: 8.3.30
 
@@ -20,6 +20,28 @@ SET time_zone = "+00:00";
 --
 -- Basis data: `campusbook`
 --
+
+-- --------------------------------------------------------
+
+--
+-- Struktur dari tabel `admins`
+--
+
+CREATE TABLE `admins` (
+  `id` int UNSIGNED NOT NULL,
+  `name` varchar(100) NOT NULL,
+  `email` varchar(150) NOT NULL,
+  `password` varchar(255) NOT NULL,
+  `status` enum('active','inactive') NOT NULL DEFAULT 'active',
+  `created_at` timestamp NULL DEFAULT CURRENT_TIMESTAMP
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+
+--
+-- Dumping data untuk tabel `admins`
+--
+
+INSERT INTO `admins` (`id`, `name`, `email`, `password`, `status`, `created_at`) VALUES
+(1, 'Administrator', 'admin@campusbook.local', '$2y$10$7l5fcHwZeV6m.of/kSNZnu3PViJ72.fVApQrCRL06ooNJoahCsuGm', 'active', '2026-10-21 14:10:11');
 
 -- --------------------------------------------------------
 
@@ -97,6 +119,24 @@ CREATE TABLE `payments` (
 -- --------------------------------------------------------
 
 --
+-- Struktur dari tabel `students`
+--
+
+CREATE TABLE `students` (
+  `id` int UNSIGNED NOT NULL,
+  `nim` varchar(20) DEFAULT NULL,
+  `name` varchar(100) NOT NULL,
+  `email` varchar(150) NOT NULL,
+  `password` varchar(255) NOT NULL,
+  `fakultas` varchar(150) DEFAULT NULL,
+  `prodi` varchar(150) DEFAULT NULL,
+  `status` enum('active','inactive') NOT NULL DEFAULT 'active',
+  `created_at` timestamp NULL DEFAULT CURRENT_TIMESTAMP
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+
+-- --------------------------------------------------------
+
+--
 -- Struktur dari tabel `users`
 --
 
@@ -121,6 +161,13 @@ INSERT INTO `users` (`id`, `nim`, `name`, `email`, `password`, `role`, `status`,
 --
 -- Indeks untuk tabel yang dibuang
 --
+
+--
+-- Indeks untuk tabel `admins`
+--
+ALTER TABLE `admins`
+  ADD PRIMARY KEY (`id`),
+  ADD UNIQUE KEY `unique_admin_email` (`email`);
 
 --
 -- Indeks untuk tabel `bookings`
@@ -154,6 +201,14 @@ ALTER TABLE `payments`
   ADD UNIQUE KEY `transaction_reference` (`transaction_reference`);
 
 --
+-- Indeks untuk tabel `students`
+--
+ALTER TABLE `students`
+  ADD PRIMARY KEY (`id`),
+  ADD UNIQUE KEY `unique_student_email` (`email`),
+  ADD UNIQUE KEY `unique_student_nim` (`nim`);
+
+--
 -- Indeks untuk tabel `users`
 --
 ALTER TABLE `users`
@@ -164,6 +219,12 @@ ALTER TABLE `users`
 --
 -- AUTO_INCREMENT untuk tabel yang dibuang
 --
+
+--
+-- AUTO_INCREMENT untuk tabel `admins`
+--
+ALTER TABLE `admins`
+  MODIFY `id` int UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 
 --
 -- AUTO_INCREMENT untuk tabel `bookings`
@@ -187,6 +248,12 @@ ALTER TABLE `notifications`
 -- AUTO_INCREMENT untuk tabel `payments`
 --
 ALTER TABLE `payments`
+  MODIFY `id` int UNSIGNED NOT NULL AUTO_INCREMENT;
+
+--
+-- AUTO_INCREMENT untuk tabel `students`
+--
+ALTER TABLE `students`
   MODIFY `id` int UNSIGNED NOT NULL AUTO_INCREMENT;
 
 --

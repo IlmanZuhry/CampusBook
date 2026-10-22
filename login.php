@@ -1,4 +1,3 @@
-
 <?php
 session_start();
 
@@ -13,57 +12,95 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
     if ($identifier === "" || $password === "") {
         $error = "NIM/email dan password wajib diisi.";
     } else {
-        $sql = "SELECT id, nim, name, email, password, role, status
-                FROM users
-                WHERE email = ? OR nim = ?
-                LIMIT 1";
+        $account = null;
+        $role = null;
 
-        $stmt = mysqli_prepare($conn, $sql);
+        // 1. Periksa akun administrator berdasarkan email.
+        $sqlAdmin = "SELECT id, name, email, password, status
+                     FROM admins
+                     WHERE email = ?
+                     LIMIT 1";
+
+        $stmt = mysqli_prepare($conn, $sqlAdmin);
 
         if (!$stmt) {
             $error = "Terjadi kesalahan saat memproses login.";
         } else {
-            mysqli_stmt_bind_param(
-                $stmt,
-                "ss",
-                $identifier,
-                $identifier
-            );
-
+            mysqli_stmt_bind_param($stmt, "s", $identifier);
             mysqli_stmt_execute($stmt);
+
             $result = mysqli_stmt_get_result($stmt);
-            $user = mysqli_fetch_assoc($result);
+            $admin = mysqli_fetch_assoc($result);
 
-            if ($user && password_verify($password, $user["password"])) {
-                if ($user["status"] !== "active") {
-                    $error = "Akun tidak aktif. Hubungi administrator.";
+            mysqli_stmt_close($stmt);
+
+            if ($admin) {
+                $account = $admin;
+                $role = "admin";
+            } else {
+                // 2. Jika bukan admin, periksa mahasiswa.
+                $sqlStudent = "SELECT id, nim, name, email, password, status
+                               FROM students
+                               WHERE email = ? OR nim = ?
+                               LIMIT 1";
+
+                $stmt = mysqli_prepare($conn, $sqlStudent);
+
+                if (!$stmt) {
+                    $error = "Terjadi kesalahan saat memproses login.";
                 } else {
-                    session_regenerate_id(true);
+                    mysqli_stmt_bind_param(
+                        $stmt,
+                        "ss",
+                        $identifier,
+                        $identifier
+                    );
 
-                    $_SESSION["user_id"] = $user["id"];
-                    $_SESSION["name"] = $user["name"];
-                    $_SESSION["email"] = $user["email"];
-                    $_SESSION["role"] = $user["role"];
+                    mysqli_stmt_execute($stmt);
+
+                    $result = mysqli_stmt_get_result($stmt);
+                    $student = mysqli_fetch_assoc($result);
 
                     mysqli_stmt_close($stmt);
 
-                    if ($user["role"] === "admin") {
-                        header("Location: admin/dashboard.php");
-                        exit;
+                    if ($student) {
+                        $account = $student;
+                        $role = "mahasiswa";
                     }
+                }
+            }
+        }
 
-                    header("Location: user/dashboard.php");
+        // 3. Verifikasi password dan status akun.
+        if ($error === "") {
+            if (
+                !$account ||
+                !password_verify($password, $account["password"])
+            ) {
+                $error = "NIM/email atau password salah.";
+            } elseif ($account["status"] !== "active") {
+                $error = "Akun tidak aktif. Hubungi administrator.";
+            } else {
+                session_regenerate_id(true);
+
+                $_SESSION["user_id"] = (int) $account["id"];
+                $_SESSION["name"] = $account["name"];
+                $_SESSION["email"] = $account["email"];
+                $_SESSION["role"] = $role;
+
+                if ($role === "admin") {
+                    header("Location: admin/dashboard.php");
                     exit;
                 }
-            } else {
-                $error = "NIM/email atau password salah.";
-            }
 
-            mysqli_stmt_close($stmt);
+                header("Location: user/dashboard.php");
+                exit;
+            }
         }
     }
 }
 ?>
+
 
 <!DOCTYPE html>
 <html lang="id">
