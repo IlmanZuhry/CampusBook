@@ -68,6 +68,7 @@ $facilities = [
 
             <div class="collapse navbar-collapse" id="mainNavbar">
                 <ul class="navbar-nav mx-auto">
+                    <li class="nav-indicator" aria-hidden="true"></li>
                     <li class="nav-item">
                         <a class="nav-link active" href="#beranda">Beranda</a>
                     </li>
@@ -75,10 +76,10 @@ $facilities = [
                         <a class="nav-link" href="#fasilitas">Fasilitas</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="#cara-pesan">Cara Pemesanan</a>
+                        <a class="nav-link" href="#tentang">Tentang</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="#tentang">Tentang</a>
+                        <a class="nav-link" href="#cara-pesan">Cara Pemesanan</a>
                     </li>
                 </ul>
 
@@ -95,6 +96,13 @@ $facilities = [
 
 <!-- HERO -->
 <section class="hero-section" id="beranda">
+    <div class="hero-photo">
+    <img
+        id="heroMainImage"
+        src="<?= htmlspecialchars($facilities[0]["image"]) ?>"
+        alt="<?= htmlspecialchars($facilities[0]["name"]) ?>"
+    >
+</div>
     <div class="container">
         <div class="row align-items-center g-5">
 
@@ -148,13 +156,7 @@ $facilities = [
                 <div class="hero-visual">
 
                     
-                    <div class="hero-photo">
-                        <img
-                            id="heroMainImage"
-                            src="<?= htmlspecialchars($facilities[0]["image"]) ?>"
-                            alt="<?= htmlspecialchars($facilities[0]["name"]) ?>"
-                        >
-                    </div>
+                    
 
 
                     <div class="facility-preview">
@@ -474,6 +476,124 @@ previewCards.forEach((card) => {
         preload.src = newImage;
     });
 });
+</script>
+<script>
+/* Navbar: menu aktif mengikuti scroll + pill biru yang berpindah */
+(() => {
+    const navLinks = [...document.querySelectorAll(".navbar-nav .nav-link")];
+    const indicator = document.querySelector(".nav-indicator");
+
+    const items = navLinks
+        .map((link) => ({
+            link,
+            section: document.querySelector(link.getAttribute("href"))
+        }))
+        .filter((item) => item.section);
+
+    let currentLink = null;
+    let clickLock = false;
+    let lockTimer = null;
+    let ticking = false;
+
+    function moveIndicator(link) {
+        if (!link || !indicator) return;
+
+        indicator.style.width = link.offsetWidth + "px";
+        indicator.style.height = link.offsetHeight + "px";
+        indicator.style.transform =
+            "translate(" + link.offsetLeft + "px, " + link.offsetTop + "px)";
+    }
+
+    function setActive(link) {
+        if (!link) return;
+
+        const changed = link !== currentLink;
+        currentLink = link;
+
+        navLinks.forEach((item) => {
+            const isActive = item === link;
+            item.classList.toggle("active", isActive);
+
+            if (isActive) {
+                item.setAttribute("aria-current", "true");
+            } else {
+                item.removeAttribute("aria-current");
+            }
+        });
+
+        if (changed || !indicator.classList.contains("is-ready")) {
+            moveIndicator(link);
+        }
+    }
+
+    function updateOnScroll() {
+        ticking = false;
+        if (clickLock) return;
+
+        const offset = 140;
+        let current = items[0];
+        let best = -Infinity;
+
+        items.forEach((item) => {
+            const top = item.section.getBoundingClientRect().top;
+            if (top <= offset && top > best) {
+                best = top;
+                current = item;
+            }
+        });
+
+        setActive(current.link);
+    }
+
+    window.addEventListener("scroll", () => {
+        if (!ticking) {
+            ticking = true;
+            requestAnimationFrame(updateOnScroll);
+        }
+    }, { passive: true });
+
+    // Saat menu diklik: langsung pindah, abaikan scroll sampai selesai
+    navLinks.forEach((link) => {
+        link.addEventListener("click", () => {
+            clickLock = true;
+            setActive(link);
+
+            clearTimeout(lockTimer);
+            lockTimer = setTimeout(() => { clickLock = false; }, 900);
+        });
+    });
+
+    window.addEventListener("scrollend", () => {
+        clearTimeout(lockTimer);
+        clickLock = false;
+    });
+
+    // Hitung ulang posisi pill saat ukuran berubah / menu mobile dibuka
+    function refresh() {
+        moveIndicator(currentLink);
+    }
+
+    window.addEventListener("resize", refresh);
+
+    const collapse = document.getElementById("mainNavbar");
+    if (collapse) {
+        collapse.addEventListener("shown.bs.collapse", refresh);
+    }
+
+    // Posisi awal tanpa animasi, lalu aktifkan transisi
+    function init() {
+        updateOnScroll();
+        requestAnimationFrame(() => {
+            indicator.classList.add("is-ready");
+        });
+    }
+
+    if (document.fonts && document.fonts.ready) {
+        document.fonts.ready.then(init);
+    } else {
+        window.addEventListener("load", init);
+    }
+})();
 </script>
 
 </body>
