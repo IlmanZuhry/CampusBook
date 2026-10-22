@@ -420,26 +420,61 @@ $facilities = [
 
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 
+
+
 <script>
-document.querySelectorAll(".preview-card").forEach((card) => {
+const mainImage = document.getElementById("heroMainImage");
+const previewCards = document.querySelectorAll(".preview-card");
+
+let imageChanging = false;
+
+previewCards.forEach((card) => {
     card.addEventListener("click", () => {
-        const mainImage = document.getElementById("heroMainImage");
+        if (imageChanging) return;
 
-        mainImage.src = card.dataset.image;
-        mainImage.alt = card.dataset.name;
+        const newImage = card.dataset.image;
+        const newName = card.dataset.name;
 
-        document.querySelectorAll(".preview-card").forEach((item) => {
-            item.classList.remove("selected");
-            item.setAttribute("aria-pressed", "false");
+        if (mainImage.getAttribute("src") === newImage) return;
+
+        imageChanging = true;
+
+        previewCards.forEach((item) => {
+            const selected = item === card;
+            item.classList.toggle("selected", selected);
+            item.setAttribute("aria-pressed", String(selected));
         });
 
-        card.classList.add("selected");
-        card.setAttribute("aria-pressed", "true");
+        const preload = new Image();
+
+        preload.onload = () => {
+            mainImage.classList.add("is-changing");
+
+            const onFadeOut = (event) => {
+                if (event.propertyName !== "opacity") return;
+
+                mainImage.removeEventListener("transitionend", onFadeOut);
+
+                mainImage.src = newImage;
+                mainImage.alt = newName;
+
+                requestAnimationFrame(() => {
+                    mainImage.classList.remove("is-changing");
+                    imageChanging = false;
+                });
+            };
+
+            mainImage.addEventListener("transitionend", onFadeOut);
+        };
+
+        preload.onerror = () => {
+            imageChanging = false;
+        };
+
+        preload.src = newImage;
     });
 });
 </script>
-</body>
-</html>
 
 </body>
 </html>
