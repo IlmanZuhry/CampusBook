@@ -24,25 +24,25 @@ $currentPage = basename($_SERVER["PHP_SELF"]);
             <span>Data Mahasiswa</span>
         </a>
 
-        <a href="#"
+        <a href="fasilitas.php"
            class="sidebar-link <?= $currentPage === 'fasilitas.php' ? 'active' : '' ?>">
             <span class="nav-icon">▣</span>
             <span>Fasilitas</span>
         </a>
 
-        <a href="#"
+        <a href="pemesanan.php"
            class="sidebar-link <?= $currentPage === 'pemesanan.php' ? 'active' : '' ?>">
             <span class="nav-icon">▤</span>
             <span>Pemesanan</span>
         </a>
 
-        <a href="#"
+        <a href="pembayaran.php"
            class="sidebar-link <?= $currentPage === 'pembayaran.php' ? 'active' : '' ?>">
             <span class="nav-icon">◇</span>
             <span>Pembayaran</span>
         </a>
 
-        <a href="#"
+        <a href="notifikasi.php"
            class="sidebar-link <?= $currentPage === 'notifikasi.php' ? 'active' : '' ?>">
             <span class="nav-icon">♧</span>
             <span>Notifikasi</span>
