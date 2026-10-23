@@ -1,6 +1,18 @@
 
 <?php
 $currentPage = basename($_SERVER["PHP_SELF"]);
+
+// Jumlah pemesanan yang menunggu persetujuan (lencana di menu).
+$pendingBookingBadge = 0;
+if (isset($conn) && $conn instanceof mysqli) {
+    $pendingResult = @mysqli_query(
+        $conn,
+        "SELECT COUNT(*) AS total FROM bookings WHERE status = 'pending'"
+    );
+    if ($pendingResult) {
+        $pendingBookingBadge = (int) (mysqli_fetch_assoc($pendingResult)["total"] ?? 0);
+    }
+}
 ?>
 
 <aside class="admin-sidebar">
@@ -24,25 +36,28 @@ $currentPage = basename($_SERVER["PHP_SELF"]);
             <span>Data Mahasiswa</span>
         </a>
 
-        <a href="#"
+        <a href="fasilitas.php"
            class="sidebar-link <?= $currentPage === 'fasilitas.php' ? 'active' : '' ?>">
             <span class="nav-icon">▣</span>
             <span>Fasilitas</span>
         </a>
 
-        <a href="#"
+        <a href="pemesanan.php"
            class="sidebar-link <?= $currentPage === 'pemesanan.php' ? 'active' : '' ?>">
             <span class="nav-icon">▤</span>
             <span>Pemesanan</span>
+            <?php if (!empty($pendingBookingBadge)): ?>
+                <span class="nav-badge"><?= (int) $pendingBookingBadge ?></span>
+            <?php endif; ?>
         </a>
 
-        <a href="#"
+        <a href="pembayaran.php"
            class="sidebar-link <?= $currentPage === 'pembayaran.php' ? 'active' : '' ?>">
             <span class="nav-icon">◇</span>
             <span>Pembayaran</span>
         </a>
 
-        <a href="#"
+        <a href="notifikasi.php"
            class="sidebar-link <?= $currentPage === 'notifikasi.php' ? 'active' : '' ?>">
             <span class="nav-icon">♧</span>
             <span>Notifikasi</span>

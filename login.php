@@ -17,8 +17,8 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
 
         // 1. Periksa akun administrator berdasarkan email.
         $sqlAdmin = "SELECT id, name, email, password, status
-                     FROM admins
-                     WHERE email = ?
+                     FROM users
+                     WHERE email = ? AND role = 'admin'
                      LIMIT 1";
 
         $stmt = mysqli_prepare($conn, $sqlAdmin);

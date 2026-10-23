@@ -11,6 +11,7 @@ if (
 }
 
 require_once __DIR__ . "/../config/database.php";
+require_once __DIR__ . "/../includes/admin_helpers.php";
 ?>
 <!DOCTYPE html>
 <html lang="id">
@@ -29,7 +30,11 @@ require_once __DIR__ . "/../config/database.php";
 
     <main class="admin-main">
 
-        <?php require_once __DIR__ . "/../includes/admin_header.php"; ?>
+        <?php render_admin_header(
+            "ADMIN WORKSPACE",
+            "Dashboard Admin",
+            "Kelola fasilitas dan pantau aktivitas pemesanan kampus."
+        ); ?>
 
         <section class="welcome-banner">
             <div>
