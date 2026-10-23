@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: localhost
--- Waktu pembuatan: 22 Okt 2026 pada 16.01
+-- Waktu pembuatan: 23 Okt 2026 pada 16.33
 -- Versi server: 8.4.3
 -- Versi PHP: 8.3.30
 
@@ -134,29 +134,12 @@ CREATE TABLE `students` (
   `created_at` timestamp NULL DEFAULT CURRENT_TIMESTAMP
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
--- --------------------------------------------------------
-
 --
--- Struktur dari tabel `users`
+-- Dumping data untuk tabel `students`
 --
 
-CREATE TABLE `users` (
-  `id` int UNSIGNED NOT NULL,
-  `nim` varchar(20) DEFAULT NULL,
-  `name` varchar(100) NOT NULL,
-  `email` varchar(150) NOT NULL,
-  `password` varchar(255) NOT NULL,
-  `role` enum('admin','user') NOT NULL DEFAULT 'user',
-  `status` enum('active','inactive') NOT NULL DEFAULT 'active',
-  `created_at` timestamp NULL DEFAULT CURRENT_TIMESTAMP
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
-
---
--- Dumping data untuk tabel `users`
---
-
-INSERT INTO `users` (`id`, `nim`, `name`, `email`, `password`, `role`, `status`, `created_at`) VALUES
-(1, NULL, 'Administrator', 'admin@campusbook.local', '$2y$10$7l5fcHwZeV6m.of/kSNZnu3PViJ72.fVApQrCRL06ooNJoahCsuGm', 'admin', 'active', '2026-10-21 14:10:11');
+INSERT INTO `students` (`id`, `nim`, `name`, `email`, `password`, `fakultas`, `prodi`, `status`, `created_at`) VALUES
+(2, '241712047', 'Ilman Zuhry', 'ilmanemil31@gmail.com', '$2y$10$tUiEJEh5FSEqbZMtELLgIekuQl2Ohk1T0rlJ/6DuB6qPLSx9XrrXq', 'Fakultas Vokasi', 'Teknik Informatika', 'active', '2026-10-23 13:42:58');
 
 --
 -- Indeks untuk tabel yang dibuang
@@ -209,14 +192,6 @@ ALTER TABLE `students`
   ADD UNIQUE KEY `unique_student_nim` (`nim`);
 
 --
--- Indeks untuk tabel `users`
---
-ALTER TABLE `users`
-  ADD PRIMARY KEY (`id`),
-  ADD UNIQUE KEY `email` (`email`),
-  ADD UNIQUE KEY `nim` (`nim`);
-
---
 -- AUTO_INCREMENT untuk tabel yang dibuang
 --
 
@@ -254,13 +229,7 @@ ALTER TABLE `payments`
 -- AUTO_INCREMENT untuk tabel `students`
 --
 ALTER TABLE `students`
-  MODIFY `id` int UNSIGNED NOT NULL AUTO_INCREMENT;
-
---
--- AUTO_INCREMENT untuk tabel `users`
---
-ALTER TABLE `users`
-  MODIFY `id` int UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+  MODIFY `id` int UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 
 --
 -- Ketidakleluasaan untuk tabel pelimpahan (Dumped Tables)
