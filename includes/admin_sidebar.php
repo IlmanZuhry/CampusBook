@@ -85,3 +85,38 @@ $currentPage = basename($_SERVER["PHP_SELF"]);
         </div>
     </div>
 </aside>
+<script>
+const logoutModal = document.getElementById("logoutModal");
+const openLogoutModal = document.getElementById("openLogoutModal");
+const cancelLogout = document.getElementById("cancelLogout");
+
+function showLogoutModal() {
+    logoutModal.classList.add("show");
+    logoutModal.setAttribute("aria-hidden", "false");
+    cancelLogout.focus();
+}
+
+function hideLogoutModal() {
+    logoutModal.classList.remove("show");
+    logoutModal.setAttribute("aria-hidden", "true");
+    openLogoutModal.focus();
+}
+
+openLogoutModal.addEventListener("click", showLogoutModal);
+cancelLogout.addEventListener("click", hideLogoutModal);
+
+logoutModal.addEventListener("click", function (event) {
+    if (event.target === logoutModal) {
+        hideLogoutModal();
+    }
+});
+
+document.addEventListener("keydown", function (event) {
+    if (
+        event.key === "Escape" &&
+        logoutModal.classList.contains("show")
+    ) {
+        hideLogoutModal();
+    }
+});
+</script>

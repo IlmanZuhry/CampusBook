@@ -1,159 +1,248 @@
 
+
 .student-stats {
-    display: grid;
+display: grid;
+
     grid-template-columns: repeat(3, minmax(0, 1fr));
+
     gap: 18px;
+
     margin-bottom: 26px;
 }
 
+
+
+
 .student-stat {
-    display: flex;
+display: flex;
+
     align-items: center;
+
     gap: 15px;
+
     padding: 22px;
+
     border: 1px solid var(--border);
+
     border-radius: 14px;
+
     background: #fff;
 }
 
+
+
+
 .student-stat-icon {
-    display: flex;
+display: flex;
+
     align-items: center;
+
     justify-content: center;
+
     flex-shrink: 0;
+
     width: 45px;
+
     height: 45px;
+
     border-radius: 12px;
+
     font-size: 21px;
+
     font-weight: 800;
 }
 
+
+
+
 .student-stat-icon.blue {
-    color: #0866f5;
+color: #0866f5;
+
     background: #eaf2ff;
 }
 
+
+
+
 .student-stat-icon.green {
-    color: #15945b;
+color: #15945b;
+
     background: #e6f9ef;
 }
 
+
+
+
 .student-stat-icon.orange {
-    color: #e68a19;
+color: #e68a19;
+
     background: #fff2e2;
 }
 
+
+
+
 .student-stat p {
-    margin: 0 0 7px;
+margin: 0 0 7px;
+
     color: #64748b;
+
     font-size: 12px;
 }
 
+
+
+
 .student-stat h2 {
-    margin: 0;
+margin: 0;
+
     font-size: 25px;
+
     font-weight: 800;
 }
 
+
+
+
 .student-panel {
-    overflow: hidden;
+overflow: hidden;
+
     border: 1px solid var(--border);
+
     border-radius: 15px;
+
     background: #fff;
 }
 
+
+
+
 .student-panel-heading {
-    display: flex;
+display: flex;
+
     align-items: center;
+
     justify-content: space-between;
+
     gap: 18px;
+
     padding: 23px 25px;
+
     border-bottom: 1px solid var(--border);
 }
 
+
+
+
 .student-panel-heading h2 {
-    margin: 0 0 7px;
+margin: 0 0 7px;
+
     font-size: 17px;
+
     font-weight: 800;
 }
 
+
+
+
 .student-panel-heading p {
-    margin: 0;
+margin: 0;
+
     color: #64748b;
+
     font-size: 12px;
+
     line-height: 1.6;
 }
 
-.student-add-button {
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    gap: 8px;
-    flex-shrink: 0;
-    min-height: 42px;
-    padding: 0 15px;
-    border-radius: 9px;
-    background: #0866f5;
-    color: #fff;
-    font-size: 12px;
-    font-weight: 700;
-    text-decoration: none;
-}
 
-.student-add-button:hover {
-    background: #0752c7;
-    color: #fff;
-}
 
-.student-add-button span {
-    font-size: 19px;
-}
 
 .student-filters {
-    display: flex;
+display: flex;
+
     flex-wrap: wrap;
+
     align-items: center;
+
     gap: 10px;
+
     padding: 18px 24px;
 }
 
+
+
+
 .student-search {
-    display: flex;
+display: flex;
+
     align-items: center;
+
     flex: 1;
+
     min-width: 200px;
+
     height: 42px;
+
     gap: 9px;
+
     padding: 0 12px;
+
     border: 1px solid #e1e9f6;
+
     border-radius: 9px;
+
     background: #f8faff;
+
     color: #64748b;
 }
 
+
+
+
 .student-search span {
-    font-size: 21px;
+font-size: 21px;
 }
 
+
+
+
 .student-search input {
-    width: 100%;
+width: 100%;
+
     min-width: 0;
+
     border: 0;
+
     outline: 0;
+
     background: transparent;
+
     color: #0b1d49;
+
     font: inherit;
+
     font-size: 12px;
 }
 
+
+
+
 .student-filters select {
-    height: 42px;
+height: 42px;
+
     padding: 0 12px;
+
     border: 1px solid #e1e9f6;
+
     border-radius: 9px;
+
     background: #fff;
+
     color: #526582;
+
     font: inherit;
+
     font-size: 12px;
 }
 
@@ -180,14 +269,19 @@
 }
 
 .student-table-wrapper {
-    overflow-x: auto;
+overflow-x: auto;
 }
 
 .student-table {
-    width: 100%;
+width: 100%;
+
     border-collapse: collapse;
+
     white-space: nowrap;
 }
+
+
+
 
 .student-table th {
     padding: 14px 20px;
@@ -207,39 +301,68 @@
 }
 
 .student-table tbody tr:hover {
-    background: #fbfdff;
+background: #fbfdff;
 }
 
+
+
+
 .student-identity {
-    display: flex;
+display: flex;
+
     align-items: center;
+
     gap: 11px;
 }
 
+
+
+
 .student-identity strong {
-    color: #0b1d49;
+color: #0b1d49;
+
     font-size: 12px;
 }
 
+
+
+
 .student-avatar {
-    display: flex;
+display: flex;
+
     align-items: center;
+
     justify-content: center;
+
     flex-shrink: 0;
+
     width: 36px;
+
     height: 36px;
+
     border-radius: 10px;
+
     background: #eaf2ff;
+
     color: #0866f5;
+
     font-weight: 800;
 }
 
+
+
+
 .student-status {
-    display: inline-flex;
+display: inline-flex;
+
     align-items: center;
+
     padding: 6px 10px;
+
     border-radius: 20px;
+
     font-size: 10px;
+
     font-weight: 700;
 }
 
@@ -249,106 +372,186 @@
 }
 
 .student-status.is-inactive {
-    background: #fff1f2;
+background: #fff1f2;
+
     color: #be123c;
 }
 
+
+
+
 .student-edit-button {
-    display: inline-flex;
+display: inline-flex;
+
     align-items: center;
+
     justify-content: center;
-    min-height: 31px;
-    padding: 0 12px;
-    border: 1px solid #dbe7fb;
-    border-radius: 7px;
-    color: #0866f5;
-    font-size: 11px;
-    font-weight: 700;
+
+    min-height: 38px;
+
+    padding: 0;
+
+    border: 1px solid #dbeafe;
+
+    border-radius: 10px;
+
+    color: #2563eb;
+
+    background: #eff6ff;
+
+    font-size: 0;
+
     text-decoration: none;
+
+    cursor: pointer;
 }
+
+
+
 
 .student-edit-button:hover {
-    background: #eaf2ff;
+background: #dbeafe;
 }
 
+
+
+
 .student-empty {
-    padding: 48px 20px !important;
+padding: 48px 20px !important;
+
     text-align: center !important;
 }
 
+
+
+
 .student-empty-icon {
-    margin-bottom: 10px;
+margin-bottom: 10px;
+
     color: #0866f5;
+
     font-size: 27px;
 }
 
+
+
+
 .student-empty strong {
-    display: block;
+display: block;
+
     color: #0b1d49;
+
     font-size: 13px;
 }
 
+
+
+
 .student-empty p {
-    margin: 8px 0 0;
+margin: 8px 0 0;
+
     color: #64748b;
+
     font-size: 12px;
 }
 
+
+
+
 .student-table-footer {
-    padding: 15px 22px;
+padding: 15px 22px;
+
     border-top: 1px solid var(--border);
+
     color: #64748b;
+
     font-size: 11px;
 }
 
+
+
+
 @media (max-width: 760px) {
+
+
     .student-stats {
-        grid-template-columns: 1fr;
-    }
-
-    .student-panel-heading {
-        align-items: flex-start;
-        flex-direction: column;
-        padding: 20px;
-    }
-
-    .student-filters {
-        padding: 16px;
-    }
-
-    .student-search {
-        flex-basis: 100%;
-    }
-
-    .student-table th,
-    .student-table td {
-        padding: 14px;
-    }
+grid-template-columns: 1fr;
 }
 
+
+
+
+    .student-panel-heading {
+align-items: flex-start;
+
+        flex-direction: column;
+
+        padding: 20px;
+}
+
+
+
+
+    .student-filters {
+padding: 16px;
+}
+
+
+
+
+    .student-search {
+flex-basis: 100%;
+}
+
+
+
+
+    .student-table th,
+.student-table td {
+padding: 14px;
+}
+}
+
+
+
+
 .student-modal {
-    display: none;
+display: none;
+
     position: fixed;
+
     inset: 0;
+
     z-index: 1000;
+
     background: rgba(15, 23, 42, 0.5);
+
     align-items: center;
+
     justify-content: center;
+
     padding: 20px;
 }
 
 .student-modal.show {
-    display: flex;
+display: flex;
 }
 
 .student-modal-content {
-    background: #fff;
+background: #fff;
+
     width: 100%;
+
     max-width: 520px;
+
     max-height: 90vh;
+
     overflow-y: auto;
+
     border-radius: 16px;
+
     padding: 26px;
+
     box-shadow: 0 20px 60px rgba(0, 0, 0, 0.2);
 }
 
@@ -381,32 +584,53 @@
 }
 
 .form-group {
-    margin-bottom: 17px;
+margin-bottom: 17px;
 }
 
+
+
+
 .form-group label {
-    display: block;
+display: block;
+
     margin-bottom: 7px;
+
     font-size: 14px;
+
     font-weight: 600;
+
     color: #334155;
 }
 
+
+
+
 .form-group input,
 .form-group select {
-    box-sizing: border-box;
+box-sizing: border-box;
+
     width: 100%;
+
     padding: 12px 13px;
+
     border: 1px solid #dbe2ea;
+
     border-radius: 9px;
+
     font-size: 14px;
+
     outline: none;
+
     background: #fff;
 }
 
+
+
+
 .form-group input:focus,
 .form-group select:focus {
-    border-color: #10b981;
+border-color: #10b981;
+
     box-shadow: 0 0 0 3px rgba(16, 185, 129, 0.12);
 }
 
@@ -439,14 +663,13 @@
 }
 
 .btn-save:hover {
-    background: #047857;
+background: #047857;
 }
 
 body.modal-open {
-    overflow: hidden;
+overflow: hidden;
 }
 
-/* Tombol tambah mahasiswa */
 .btn-add {
     display: inline-flex;
     align-items: center;
@@ -468,7 +691,6 @@ body.modal-open {
     transform: translateY(-1px);
 }
 
-/* Modal tambah mahasiswa */
 .student-modal {
     display: none;
     position: fixed;
@@ -481,7 +703,73 @@ body.modal-open {
 }
 
 .student-modal.show {
-    display: flex !important;
+display: flex !important;
+}
+
+/* Tombol aksi Edit dan Hapus */
+.student-actions {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.student-actions .icon-action {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 38px;
+    height: 38px;
+    padding: 0;
+    border: 1px solid transparent;
+    border-radius: 10px;
+    cursor: pointer;
+    transition: background-color 0.2s ease,
+                border-color 0.2s ease,
+                transform 0.2s ease;
+}
+
+.student-actions .icon-action:hover {
+    transform: translateY(-1px);
+}
+
+.student-actions .icon-action svg {
+    width: 18px;
+    height: 18px;
+    fill: none;
+    stroke: currentColor;
+    stroke-width: 1.8;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+}
+
+/* Edit: biru */
+.student-actions .student-edit-button {
+    color: #2563eb;
+    background: #eff6ff;
+    border-color: #dbeafe;
+}
+
+.student-actions .student-edit-button:hover {
+    background: #dbeafe;
+    border-color: #93c5fd;
+}
+
+/* Hapus: merah */
+.student-actions .student-delete-button {
+    color: #dc2626;
+    background: #fef2f2;
+    border-color: #fee2e2;
+}
+
+.student-actions .student-delete-button:hover {
+    background: #fee2e2;
+    border-color: #fca5a5;
+}
+
+/* Hilangkan margin form agar sejajar dengan tombol Edit */
+.student-actions .inline-delete {
+    display: inline-flex;
+    margin: 0;
 }
 
 .student-modal-content {
@@ -495,3 +783,117 @@ body.modal-open {
     background: #ffffff;
     box-shadow: 0 20px 60px rgba(0, 0, 0, 0.2);
 }
+
+.student-actions {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+}
+/* Form hapus */
+
+.student-actions form.inline-delete {
+    display: inline-flex;
+    align-items: center;
+    margin: 0;
+    padding: 0;
+    border: 0;
+    background: transparent;
+}
+/* Tombol Hapus mahasiswa */
+.student-delete-button {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 31px;
+    padding: 0 12px;
+    border: 1px solid #fee2e2;
+    border-radius: 7px;
+    color: #dc2626;
+    background: #fef2f2;
+    font: inherit;
+    font-size: 11px;
+    font-weight: 700;
+    cursor: pointer;
+    transition: background 0.2s, border-color 0.2s;
+}
+
+.student-delete-button:hover {
+    background: #fee2e2;
+    border-color: #fca5a5;
+}
+
+.student-actions {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.student-actions form.inline-delete {
+    display: inline-flex;
+    margin: 0;
+}
+
+/* Modal konfirmasi hapus */
+#deleteConfirmModal {
+    z-index: 1100;
+}
+
+#deleteConfirmModal .delete-confirm-content {
+    width: 100%;
+    max-width: 420px;
+    padding: 28px;
+    text-align: center;
+}
+
+#deleteConfirmModal .delete-confirm-icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 56px;
+    height: 56px;
+    margin: 0 auto 18px;
+    border-radius: 50%;
+    color: #dc2626;
+    background: #fef2f2;
+}
+
+#deleteConfirmModal .delete-confirm-icon svg {
+    width: 26px;
+    height: 26px;
+}
+
+#deleteConfirmModal h2 {
+    margin: 0 0 10px;
+    color: #0b1d49;
+    font-size: 20px;
+}
+
+#deleteConfirmModal p {
+    margin: 0 0 24px;
+    color: #64748b;
+    font-size: 14px;
+    line-height: 1.6;
+}
+
+#deleteConfirmModal .delete-confirm-actions {
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+}
+
+#deleteConfirmModal .btn-delete-confirm {
+    padding: 11px 18px;
+    border: 0;
+    border-radius: 9px;
+    color: #fff;
+    background: #dc2626;
+    font: inherit;
+    font-weight: 700;
+    cursor: pointer;
+}
+
+#deleteConfirmModal .btn-delete-confirm:hover {
+    background: #b91c1c;
+}
+

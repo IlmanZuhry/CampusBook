@@ -35,6 +35,26 @@ $formData = [
 
 $showModal = false;
 
+$daftarFakultas = [
+    "Fakultas Kedokteran",
+    "Fakultas Hukum",
+    "Fakultas Pertanian",
+    "Fakultas Teknik",
+    "Fakultas Ekonomi dan Bisnis",
+    "Fakultas Kedokteran Gigi",
+    "Fakultas Ilmu Budaya",
+    "Fakultas Matematika dan Ilmu Pengetahuan Alam (MIPA)",
+    "Fakultas Ilmu Sosial dan Ilmu Politik (FISIP)",
+    "Fakultas Kesehatan Masyarakat",
+    "Fakultas Psikologi",
+    "Fakultas Farmasi",
+    "Fakultas Keperawatan",
+    "Fakultas Ilmu Komputer dan Teknologi Informasi (Fasilkom-TI)",
+    "Fakultas Kehutanan",
+    "Fakultas Vokasi",
+    "Sekolah Pascasarjana"
+];
+
 /* =========================
    PROSES CREATE, UPDATE, DELETE
 ========================= */
@@ -68,8 +88,12 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
                 $formData["prodi"] === ""
             ) {
                 $error = "Semua data mahasiswa wajib diisi.";
+            } elseif (!preg_match('/^[0-9]+$/', $formData["nim"])) {
+                $error = "NIM wajib diisi dan hanya boleh berisi angka.";
             } elseif (!filter_var($formData["email"], FILTER_VALIDATE_EMAIL)) {
-                $error = "Format email tidak valid.";
+                $error = "Format email tidak valid. Gunakan format nama@email.com.";
+            } elseif (!in_array($formData["fakultas"], $daftarFakultas, true)) {
+                $error = "Silakan pilih fakultas yang tersedia.";
             } elseif (
                 !in_array($formData["status"], ["active", "inactive"], true)
             ) {
@@ -488,27 +512,60 @@ $inactiveStudents = (int) $counts["inactive_total"];
                                     </span>
                                 </td>
                                 <td>
-                                    <div class="student-actions">
-                                        <button
-                                            type="button"
-                                            class="student-edit-button edit-student"
-                                            data-id="<?= (int) $student["id"] ?>"
-                                            data-nim="<?= e($student["nim"]) ?>"
-                                            data-name="<?= e($student["name"]) ?>"
-                                            data-email="<?= e($student["email"]) ?>"
-                                            data-fakultas="<?= e($student["fakultas"]) ?>"
-                                            data-prodi="<?= e($student["prodi"]) ?>"
-                                            data-status="<?= e($student["status"]) ?>"
-                                        >Edit</button>
+                                    
+                        
+<div class="student-actions">
+    <!-- Tombol Edit -->
+    <button
+        type="button"
+        class="student-edit-button edit-student icon-action"
+        data-id="<?= (int) $student["id"] ?>"
+        data-nim="<?= e($student["nim"]) ?>"
+        data-name="<?= e($student["name"]) ?>"
+        data-email="<?= e($student["email"]) ?>"
+        data-fakultas="<?= e($student["fakultas"]) ?>"
+        data-prodi="<?= e($student["prodi"]) ?>"
+        data-status="<?= e($student["status"]) ?>"
+        title="Edit mahasiswa"
+        aria-label="Edit mahasiswa"
+    >
+        <svg viewBox="0 0 24 24" aria-hidden="true">
+            <path d="M12 20h9"/>
+            <path d="M16.5 3.5a2.12 2.12 0 0 1 3 3L8 18l-4 1 1-4Z"/>
+        </svg>
+    </button>
 
-                                        <form method="POST" class="inline-delete"
-                                              onsubmit="return confirm('Yakin ingin menghapus mahasiswa ini?')">
-                                            <input type="hidden" name="csrf_token" value="<?= e($_SESSION["csrf_token"]) ?>">
-                                            <input type="hidden" name="action" value="delete">
-                                            <input type="hidden" name="id" value="<?= (int) $student["id"] ?>">
-                                            <button type="submit" class="student-delete-button">Hapus</button>
-                                        </form>
-                                    </div>
+    <!-- Tombol Hapus -->
+    <form method="POST" class="inline-delete">
+        <input
+            type="hidden"
+            name="csrf_token"
+            value="<?= e($_SESSION["csrf_token"]) ?>"
+        >
+        <input type="hidden" name="action" value="delete">
+        <input
+            type="hidden"
+            name="id"
+            value="<?= (int) $student["id"] ?>"
+        >
+
+        <button
+            type="submit"
+            class="student-delete-button icon-action"
+            title="Hapus mahasiswa"
+            aria-label="Hapus mahasiswa"
+        >
+            <svg viewBox="0 0 24 24" aria-hidden="true">
+                <path d="M3 6h18"/>
+                <path d="M8 6V4h8v2"/>
+                <path d="m19 6-1 14H6L5 6"/>
+                <path d="M10 11v5M14 11v5"/>
+            </svg>
+        </button>
+    </form>
+</div>
+
+
                                 </td>
                             </tr>
                         <?php endforeach; ?>
@@ -550,7 +607,9 @@ $inactiveStudents = (int) $counts["inactive_total"];
 
             <div class="form-group">
                 <label for="nim">NIM</label>
-                <input type="text" id="nim" name="nim" maxlength="20" required>
+                <input type="text" id="nim" name="nim" maxlength="20"
+                       inputmode="numeric" pattern="[0-9]+"
+                       title="NIM hanya boleh berisi angka" required>
             </div>
 
             <div class="form-group">
@@ -565,7 +624,12 @@ $inactiveStudents = (int) $counts["inactive_total"];
 
             <div class="form-group">
                 <label for="fakultas">Fakultas</label>
-                <input type="text" id="fakultas" name="fakultas" maxlength="150" required>
+                <select id="fakultas" name="fakultas" required>
+                    <option value="">-- Pilih Fakultas --</option>
+                    <?php foreach ($daftarFakultas as $fakultas): ?>
+                        <option value="<?= e($fakultas) ?>"><?= e($fakultas) ?></option>
+                    <?php endforeach; ?>
+                </select>
             </div>
 
             <div class="form-group">
@@ -595,11 +659,81 @@ $inactiveStudents = (int) $counts["inactive_total"];
     </div>
 </div>
 
+<!-- Modal konfirmasi hapus mahasiswa -->
+<div class="student-modal" id="deleteConfirmModal" aria-hidden="true">
+    <div
+        class="student-modal-content delete-confirm-content"
+        role="dialog"
+        aria-modal="true"
+        aria-labelledby="deleteConfirmTitle"
+    >
+        <div class="delete-confirm-icon">
+            <svg viewBox="0 0 24 24" fill="none"
+                 stroke="currentColor" stroke-width="1.8"
+                 stroke-linecap="round" stroke-linejoin="round"
+                 aria-hidden="true">
+                <path d="M3 6h18"/>
+                <path d="M8 6V4h8v2"/>
+                <path d="m19 6-1 14H6L5 6"/>
+                <path d="M10 11v5M14 11v5"/>
+            </svg>
+        </div>
+
+        <h2 id="deleteConfirmTitle">Hapus Mahasiswa?</h2>
+        <p>
+            Apakah kamu yakin ingin menghapus data mahasiswa ini?
+            Data yang sudah dihapus tidak dapat dikembalikan.
+        </p>
+
+        <div class="modal-actions delete-confirm-actions">
+            <button type="button" class="btn-cancel" id="cancelDelete">
+                Batal
+            </button>
+            <button type="button" class="btn-delete-confirm" id="confirmDelete">
+                Ya, Hapus
+            </button>
+        </div>
+    </div>
+</div>
+
+
 <script>
 document.addEventListener("DOMContentLoaded", function () {
     const modal = document.getElementById("studentModal");
     const form = document.getElementById("studentForm");
     const password = document.getElementById("password");
+    const nim = document.getElementById("nim");
+    const email = document.getElementById("email");
+
+    // Hapus karakter selain angka saat NIM diketik atau ditempel.
+    nim.addEventListener("input", function () {
+        this.value = this.value.replace(/\D/g, "");
+    });
+
+    form.addEventListener("submit", function (event) {
+        const nimValue = nim.value.trim();
+        const emailValue = email.value.trim();
+
+        if (!/^\d+$/.test(nimValue)) {
+            event.preventDefault();
+            alert("NIM wajib diisi dan hanya boleh berisi angka.");
+            nim.focus();
+            return;
+        }
+
+        if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(emailValue)) {
+            event.preventDefault();
+            alert("Masukkan email yang valid, misalnya nama@email.com.");
+            email.focus();
+            return;
+        }
+
+        if (password.required && password.value.length < 8) {
+            event.preventDefault();
+            alert("Password wajib diisi minimal 8 karakter.");
+            password.focus();
+        }
+    });
 
     const fields = {
         id: document.getElementById("studentId"),
@@ -677,6 +811,56 @@ document.addEventListener("DOMContentLoaded", function () {
     document.addEventListener("keydown", function (event) {
         if (event.key === "Escape") closeModal();
     });
+    
+const deleteModal = document.getElementById("deleteConfirmModal");
+const cancelDelete = document.getElementById("cancelDelete");
+const confirmDelete = document.getElementById("confirmDelete");
+
+let deleteFormToSubmit = null;
+
+document.querySelectorAll(".inline-delete").forEach(function (deleteForm) {
+    deleteForm.addEventListener("submit", function (event) {
+        event.preventDefault();
+
+        deleteFormToSubmit = this;
+        deleteModal.classList.add("show");
+        deleteModal.setAttribute("aria-hidden", "false");
+        document.body.classList.add("modal-open");
+    });
+});
+
+function closeDeleteModal() {
+    deleteModal.classList.remove("show");
+    deleteModal.setAttribute("aria-hidden", "true");
+    document.body.classList.remove("modal-open");
+    deleteFormToSubmit = null;
+}
+
+cancelDelete.addEventListener("click", closeDeleteModal);
+
+confirmDelete.addEventListener("click", function () {
+    if (deleteFormToSubmit) {
+        const form = deleteFormToSubmit;
+        closeDeleteModal();
+        form.submit();
+    }
+});
+
+deleteModal.addEventListener("click", function (event) {
+    if (event.target === deleteModal) {
+        closeDeleteModal();
+    }
+});
+
+document.addEventListener("keydown", function (event) {
+    if (
+        event.key === "Escape" &&
+        deleteModal.classList.contains("show")
+    ) {
+        closeDeleteModal();
+    }
+});
+
 });
 </script>
 
