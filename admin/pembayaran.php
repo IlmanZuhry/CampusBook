@@ -8,7 +8,7 @@ require_admin();
 
 const PER_PAGE = 10;
 const FILTER_KEYS = ["search", "status", "method", "page"];
-const PAYMENT_METHODS = ["transfer", "qris", "ewallet"];
+const PAYMENT_METHODS = ["transfer", "qris", "va_bca", "va_bni", "va_bri", "va_mandiri"];
 
 $error = "";
 $showModal = false;
@@ -19,6 +19,19 @@ $formData = [
     "reference"  => "",
     "status"     => "paid",
 ];
+
+$paymentMethodLabels = [
+    "transfer"   => "Transfer Bank",
+    "qris"       => "QRIS",
+    "va_bca"     => "BCA Virtual Account",
+    "va_bni"     => "BNI Virtual Account",
+    "va_bri"     => "BRI Virtual Account",
+    "va_mandiri" => "Mandiri Virtual Account",
+];
+
+$paymentMethodLabel = static function ($method) use ($paymentMethodLabels): string {
+    return $paymentMethodLabels[$method] ?? (string) $method;
+};
 
 /* =========================
    PROSES KONFIRMASI, TOLAK, CATAT PEMBAYARAN
@@ -227,7 +240,12 @@ if (in_array($statusFilter, ["pending", "paid", "failed"], true)) {
     $statusFilter = "";
 }
 
-if (in_array($methodFilter, PAYMENT_METHODS, true)) {
+if ($methodFilter === "transfer") {
+    // "Transfer Bank" juga mencakup semua metode Virtual Account.
+    $where .= " AND p.payment_method IN (
+        'transfer', 'va_bca', 'va_bni', 'va_bri', 'va_mandiri'
+    )";
+} elseif (in_array($methodFilter, PAYMENT_METHODS, true)) {
     $where .= " AND p.payment_method = ?";
     $params[] = $methodFilter;
     $types .= "s";
@@ -392,7 +410,7 @@ $backValue = http_build_query($page > 1 ? $activeFilters + ["page" => $page] : $
                     <option value="">Semua Metode</option>
                     <?php foreach (PAYMENT_METHODS as $method): ?>
                         <option value="<?= e($method) ?>" <?= $methodFilter === $method ? "selected" : "" ?>>
-                            <?= e(payment_method_label($method)) ?>
+                            <?= e($paymentMethodLabel($method)) ?>
                         </option>
                     <?php endforeach; ?>
                 </select>
@@ -433,7 +451,7 @@ $backValue = http_build_query($page > 1 ? $activeFilters + ["page" => $page] : $
                                     <strong><?= e($payment["facility_name"]) ?></strong>
                                     <span class="cell-sub cell-code"><?= e($payment["booking_code"]) ?></span>
                                 </td>
-                                <td><?= e(payment_method_label($payment["payment_method"])) ?></td>
+                                <td><?= e($paymentMethodLabel($payment["payment_method"])) ?></td>
                                 <td><strong><?= e(rupiah($payment["amount"])) ?></strong></td>
                                 <td><?= e($payment["transaction_reference"] ?: "-") ?></td>
                                 <td><?= badge($statusLabel, $statusClass) ?></td>
@@ -566,7 +584,7 @@ $backValue = http_build_query($page > 1 ? $activeFilters + ["page" => $page] : $
                         <select id="payMethod" name="method" required>
                             <?php foreach (PAYMENT_METHODS as $method): ?>
                                 <option value="<?= e($method) ?>" <?= $formData["method"] === $method ? "selected" : "" ?>>
-                                    <?= e(payment_method_label($method)) ?>
+                                    <?= e($paymentMethodLabel($method)) ?>
                                 </option>
                             <?php endforeach; ?>
                         </select>
