@@ -578,3 +578,32 @@ body.modal-open { overflow: hidden; }
 @media (prefers-reduced-motion: reduce) {
     .app-modal, .modal-card, .btn { transition: none; }
 }
+
+
+/* Menyamakan ukuran area foto fasilitas admin */
+.facility-card .facility-photo {
+    position: relative;
+    width: 100%;
+    height: 220px;
+    overflow: hidden;
+    flex-shrink: 0;
+    border-radius: 14px 14px 0 0;
+}
+
+.facility-card .facility-photo img {
+    display: block;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: center;
+}
+
+/* Placeholder mengikuti ukuran foto */
+.facility-card .facility-photo .photo-placeholder {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-sizing: border-box;
+}

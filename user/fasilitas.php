@@ -12,6 +12,182 @@ if (
     exit;
 }
 
+
+// Token CSRF untuk formulir peminjaman.
+if (empty($_SESSION["csrf_token"])) {
+    $_SESSION["csrf_token"] = bin2hex(random_bytes(32));
+}
+
+// Proses pengajuan peminjaman pada file yang sama.
+if ($_SERVER["REQUEST_METHOD"] === "POST" && ($_POST["form_action"] ?? "") === "create_booking") {
+    $back = static function (string $status): void {
+        header("Location: fasilitas.php?booking=" . rawurlencode($status));
+        exit;
+    };
+
+    $sessionToken = $_SESSION["csrf_token"] ?? "";
+    $formToken = $_POST["csrf_token"] ?? "";
+
+    if (
+        !is_string($formToken) ||
+        $sessionToken === "" ||
+        !hash_equals($sessionToken, $formToken)
+    ) {
+        $back("invalid_token");
+    }
+
+    $studentId = (int) $_SESSION["user_id"];
+    $facilityId = filter_var($_POST["facility_id"] ?? null, FILTER_VALIDATE_INT);
+    $date = trim((string) ($_POST["booking_date"] ?? ""));
+    $start = trim((string) ($_POST["start_time"] ?? ""));
+    $end = trim((string) ($_POST["end_time"] ?? ""));
+    $purpose = trim((string) ($_POST["purpose"] ?? ""));
+
+    $dateObject = DateTimeImmutable::createFromFormat("!Y-m-d", $date);
+    $dateErrors = DateTimeImmutable::getLastErrors();
+    $validDate = $dateObject !== false
+        && $dateObject->format("Y-m-d") === $date
+        && ($dateErrors === false || (
+            $dateErrors["warning_count"] === 0 &&
+            $dateErrors["error_count"] === 0
+        ));
+
+    $validTime = static function (string $time): bool {
+        return preg_match('/^(?:[01]\d|2[0-3]):[0-5]\d$/', $time) === 1;
+    };
+
+    if (
+        !$facilityId || $facilityId < 1 || !$validDate ||
+        !$validTime($start) || !$validTime($end) ||
+        $start >= $end || $purpose === "" || mb_strlen($purpose) > 2000
+    ) {
+        $back("invalid_data");
+    }
+
+    if ($dateObject < new DateTimeImmutable("today")) {
+        $back("past_date");
+    }
+
+    try {
+        $conn->begin_transaction();
+
+        // Mengunci baris fasilitas selama pemeriksaan jadwal dan penyimpanan.
+        $stmt = $conn->prepare(
+            "SELECT id, status, opening_time, closing_time
+             FROM facilities
+             WHERE id = ?
+             LIMIT 1
+             FOR UPDATE"
+        );
+        if (!$stmt) {
+            throw new RuntimeException("Gagal menyiapkan query fasilitas.");
+        }
+
+        $stmt->bind_param("i", $facilityId);
+        $stmt->execute();
+        $facility = $stmt->get_result()->fetch_assoc();
+        $stmt->close();
+
+        if (!$facility || $facility["status"] !== "active") {
+            $conn->rollback();
+            $back("facility_unavailable");
+        }
+
+        $opening = substr($facility["opening_time"], 0, 5);
+        $closing = substr($facility["closing_time"], 0, 5);
+
+        if ($start < $opening || $end > $closing) {
+            $conn->rollback();
+            $back("outside_hours");
+        }
+
+        // Dua rentang bentrok jika waktu mulai booking lama < waktu akhir baru
+        // dan waktu akhir booking lama > waktu mulai baru.
+        $stmt = $conn->prepare(
+            "SELECT id
+             FROM bookings
+             WHERE facility_id = ?
+               AND booking_date = ?
+               AND status IN ('pending', 'approved')
+               AND start_time < ?
+               AND end_time > ?
+             LIMIT 1"
+        );
+        if (!$stmt) {
+            throw new RuntimeException("Gagal menyiapkan pemeriksaan jadwal.");
+        }
+
+        $startSql = $start . ":00";
+        $endSql = $end . ":00";
+        $stmt->bind_param("isss", $facilityId, $date, $endSql, $startSql);
+        $stmt->execute();
+        $conflict = $stmt->get_result()->fetch_assoc();
+        $stmt->close();
+
+        if ($conflict) {
+            $conn->rollback();
+            $back("schedule_conflict");
+        }
+
+        $bookingCode = "CB-" . date("Ymd") . "-" . strtoupper(bin2hex(random_bytes(4)));
+        $status = "pending";
+
+        $stmt = $conn->prepare(
+            "INSERT INTO bookings
+                (booking_code, user_id, facility_id, booking_date,
+                 start_time, end_time, purpose, status)
+             VALUES (?, ?, ?, ?, ?, ?, ?, ?)"
+        );
+        if (!$stmt) {
+            throw new RuntimeException("Gagal menyiapkan penyimpanan peminjaman.");
+        }
+
+        $stmt->bind_param(
+            "siisssss",
+            $bookingCode,
+            $studentId,
+            $facilityId,
+            $date,
+            $startSql,
+            $endSql,
+            $purpose,
+            $status
+        );
+
+        if (!$stmt->execute()) {
+            $stmt->close();
+            throw new RuntimeException("Penyimpanan peminjaman gagal.");
+        }
+
+        $stmt->close();
+        $conn->commit();
+        $back("success");
+    } catch (Throwable $e) {
+        try {
+            $conn->rollback();
+        } catch (Throwable $ignored) {
+            // Abaikan jika transaksi sudah tidak aktif.
+        }
+
+        error_log("Pengajuan peminjaman gagal: " . $e->getMessage());
+        $back("server_error");
+    }
+}
+
+$bookingMessages = [
+    "success" => ["success", "Pengajuan peminjaman berhasil dikirim dan menunggu persetujuan admin."],
+    "invalid_token" => ["error", "Sesi formulir tidak valid. Muat ulang halaman lalu coba lagi."],
+    "invalid_data" => ["error", "Data peminjaman tidak valid. Periksa kembali tanggal, jam, dan keperluan."],
+    "past_date" => ["error", "Tanggal peminjaman tidak boleh berada di masa lalu."],
+    "facility_unavailable" => ["error", "Fasilitas tidak tersedia atau sudah dinonaktifkan."],
+    "outside_hours" => ["error", "Jam peminjaman harus berada dalam jam operasional fasilitas."],
+    "schedule_conflict" => ["error", "Jadwal tersebut bentrok dengan pengajuan lain. Silakan pilih waktu lain."],
+    "server_error" => ["error", "Pengajuan belum dapat disimpan karena terjadi kesalahan server."],
+    "invalid_request" => ["error", "Permintaan tidak valid."]
+];
+$bookingNotice = $bookingMessages[$_GET["booking"] ?? ""] ?? null;
+
+
 $pageTitle = "Fasilitas";
 $pageDescription = "Jelajahi fasilitas kampus yang tersedia.";
 
@@ -121,6 +297,33 @@ $stmt->close();
         <?php require_once __DIR__ . "/../includes/user_header.php"; ?>
 
         <section class="catalog-page">
+            
+            <?php if ($bookingNotice): ?>
+                <div
+                    class="booking-result-overlay"
+                    id="bookingResultModal"
+                    role="dialog"
+                    aria-modal="true"
+                    aria-labelledby="bookingResultTitle"
+                >
+                    <div class="booking-result-card">
+                        <div class="booking-result-icon <?= $bookingNotice[0] === "success" ? "is-success" : "is-error" ?>">
+                            <i class="fas <?= $bookingNotice[0] === "success" ? "fa-check" : "fa-xmark" ?>"></i>
+                        </div>
+
+                        <h2 id="bookingResultTitle">
+                            <?= $bookingNotice[0] === "success" ? "Pengajuan Berhasil!" : "Pengajuan Gagal" ?>
+                        </h2>
+
+                        <p><?= escapeHtml($bookingNotice[1]) ?></p>
+
+                        <button type="button" class="catalog-button" id="closeBookingResult">
+                            Mengerti
+                        </button>
+                    </div>
+                </div>
+            <?php endif; ?>
+
             <div class="catalog-heading">
                 <div>
                     <span class="catalog-eyebrow">CAMPUS FACILITIES</span>
@@ -331,8 +534,9 @@ $stmt->close();
             <h2 id="bookingModalTitle">Ajukan Peminjaman</h2>
             <p id="bookingFacilityName"></p>
 
-            <form method="POST" action="proses_peminjaman.php"
-                  id="bookingForm">
+            <form method="POST" action="fasilitas.php" id="bookingForm">
+                <input type="hidden" name="form_action" value="create_booking">
+                <input type="hidden" name="csrf_token" value="<?= escapeHtml($_SESSION["csrf_token"]) ?>">
                 <input type="hidden" name="facility_id" id="bookingFacilityId">
 
                 <label for="bookingDate">Tanggal peminjaman</label>
@@ -465,33 +669,62 @@ document.querySelectorAll("[data-book-facility]").forEach(button => {
         bookingModal.setAttribute("aria-hidden", "false");
         document.body.style.overflow = "hidden";
     });
-});
+    });
 
-document.getElementById("closeBookingModal")
-    .addEventListener("click", closeBookingModal);
+        document.getElementById("closeBookingModal")
+            .addEventListener("click", closeBookingModal);
 
-document.getElementById("cancelBooking")
-    .addEventListener("click", closeBookingModal);
+        document.getElementById("cancelBooking")
+            .addEventListener("click", closeBookingModal);
 
-bookingModal.addEventListener("click", event => {
-    if (event.target === bookingModal) closeBookingModal();
-});
+        bookingModal.addEventListener("click", event => {
+            if (event.target === bookingModal) closeBookingModal();
+        });
 
-document.addEventListener("keydown", event => {
-    if (event.key === "Escape" && bookingModal.classList.contains("show")) {
-        closeBookingModal();
+        document.addEventListener("keydown", event => {
+            if (event.key === "Escape" && bookingModal.classList.contains("show")) {
+                closeBookingModal();
+            }
+        });
+
+        bookingForm.addEventListener("submit", event => {
+            const start = document.getElementById("bookingStart").value;
+            const end = document.getElementById("bookingEnd").value;
+
+            if (end <= start) {
+                event.preventDefault();
+                alert("Jam selesai harus lebih akhir daripada jam mulai.");
+            }
+            });
+
+        const bookingResultModal = document.getElementById("bookingResultModal");
+        const closeBookingResult = document.getElementById("closeBookingResult");
+
+        function dismissBookingResult() {
+            if (!bookingResultModal) return;
+
+            bookingResultModal.remove();
+            document.body.style.overflow = "";
+        }
+
+        if (bookingResultModal) {
+            document.body.style.overflow = "hidden";
+
+            closeBookingResult?.addEventListener("click", dismissBookingResult);
+
+            bookingResultModal.addEventListener("click", event => {
+                if (event.target === bookingResultModal) {
+                    dismissBookingResult();
+                }
+            });
+
+    document.addEventListener("keydown", function closeResultOnEscape(event) {
+        if (event.key === "Escape" && bookingResultModal.isConnected) {
+            dismissBookingResult();
+            document.removeEventListener("keydown", closeResultOnEscape);
+        }
+    });
     }
-});
-
-bookingForm.addEventListener("submit", event => {
-    const start = document.getElementById("bookingStart").value;
-    const end = document.getElementById("bookingEnd").value;
-
-    if (end <= start) {
-        event.preventDefault();
-        alert("Jam selesai harus lebih akhir daripada jam mulai.");
-    }
-});
 
 });
 
