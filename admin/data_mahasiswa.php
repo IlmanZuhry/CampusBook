@@ -236,10 +236,24 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
                                 if (mysqli_stmt_execute($stmt)) {
                                     mysqli_stmt_close($stmt);
 
-                                    $_SESSION["flash_success"] =
-                                        $action === "create"
-                                            ? "Mahasiswa berhasil ditambahkan."
-                                            : "Data mahasiswa berhasil diperbarui.";
+                                    
+                                    if ($action === "create") {
+                                        require_once __DIR__ . "/../config/mail.php";
+
+                                        $emailTerkirim = kirimEmailCampusBook(
+                                            $formData["email"],
+                                            $formData["name"],
+                                            $formData["nim"],
+                                            $password
+                                        );
+
+                                        $_SESSION["flash_success"] = $emailTerkirim
+                                            ? "Mahasiswa berhasil ditambahkan dan email akun berhasil dikirim."
+                                            : "Mahasiswa berhasil ditambahkan, tetapi email gagal dikirim. Periksa konfigurasi email.";
+                                    } else {
+                                        $_SESSION["flash_success"] = "Data mahasiswa berhasil diperbarui.";
+                                    }
+
 
                                     header("Location: data_mahasiswa.php");
                                     exit;
@@ -396,7 +410,29 @@ $inactiveStudents = (int) $counts["inactive_total"];
         ?>
 
         <?php if ($success !== ""): ?>
-            <div class="student-alert success"><?= e($success) ?></div>
+            
+                <div class="success-popup-overlay" id="successPopup">
+                    <div class="success-popup">
+                        <div class="success-popup-icon">
+                            <svg xmlns="http://www.w3.org/2000/svg"
+                                width="42" height="42" viewBox="0 0 24 24"
+                                fill="none" stroke="currentColor"
+                                stroke-width="2.5" stroke-linecap="round"
+                                stroke-linejoin="round">
+                                <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/>
+                                <path d="m9 11 3 3L22 4"/>
+                            </svg>
+                        </div>
+
+                        <h3>Berhasil!</h3>
+                        <p><?= e($success) ?></p>
+
+                        <button type="button" id="closeSuccessPopup">
+                            Mengerti
+                        </button>
+                    </div>
+                </div>
+
         <?php endif; ?>
 
         <?php if ($error !== ""): ?>
@@ -693,6 +729,37 @@ $inactiveStudents = (int) $counts["inactive_total"];
     </div>
 </div>
 
+
+<script>
+document.addEventListener("DOMContentLoaded", function () {
+    const popup = document.getElementById("successPopup");
+    const closeButton = document.getElementById("closeSuccessPopup");
+
+    if (!popup || !closeButton) return;
+
+    requestAnimationFrame(() => {
+        popup.classList.add("show");
+    });
+
+    function closePopup() {
+        popup.classList.remove("show");
+    }
+
+    closeButton.addEventListener("click", closePopup);
+
+    popup.addEventListener("click", function (event) {
+        if (event.target === popup) {
+            closePopup();
+        }
+    });
+
+    document.addEventListener("keydown", function (event) {
+        if (event.key === "Escape") {
+            closePopup();
+        }
+    });
+});
+</script>
 
 <script>
 document.addEventListener("DOMContentLoaded", function () {
