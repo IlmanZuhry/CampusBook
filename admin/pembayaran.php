@@ -388,7 +388,12 @@ $backValue = http_build_query($page > 1 ? $activeFilters + ["page" => $page] : $
                     <p>Pembayaran yang menunggu verifikasi ditampilkan paling atas.</p>
                 </div>
 
-                
+                <div class="row-actions" style="display:flex; gap:10px; flex-wrap:wrap;">
+                    <a href="laporan_pembayaran.php<?= $activeFilters ? "?" . e(http_build_query($activeFilters)) : "" ?>"
+                       class="btn btn-primary" target="_blank" rel="noopener">
+                        <i class="fa-solid fa-file-pdf"></i> Cetak Laporan PDF
+                    </a>
+                </div>
             </div>
 
             <form method="GET" class="toolbar">
