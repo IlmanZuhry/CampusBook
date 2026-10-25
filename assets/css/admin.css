@@ -700,3 +700,91 @@ button.sidebar-link:hover {
                 padding: 18px;
             }
         }
+        .admin-profile-page { display:grid; gap:24px; }
+        .profile-hero { display:flex; align-items:center; gap:20px; flex-wrap:wrap; padding:26px; border:1px solid #e5eaf2; border-radius:18px; background:#fff; }
+        .profile-hero-avatar { position:relative; display:flex; align-items:center; justify-content:center; width:116px; height:116px; flex-shrink:0; overflow:hidden; border-radius:50%; background:#eaf2ff; color:#1764e8; font-size:38px; font-weight:800; }
+        .profile-hero-avatar img, .profile-avatar-photo img { display:block; width:100%; height:100%; object-fit:cover; }
+        .profile-avatar-initial { display:flex; align-items:center; justify-content:center; width:100%; height:100%; }
+        .profile-photo-form { margin:0; }
+        .profile-photo-trigger { padding:0; border:0; cursor:pointer; }
+        .profile-photo-trigger:focus-visible { outline:3px solid #93c5fd; outline-offset:4px; }
+        .profile-photo-overlay { position:absolute; inset:0; display:flex; flex-direction:column; align-items:center; justify-content:center; gap:6px; border-radius:50%; background:rgba(15,23,42,.68); color:#fff; opacity:0; transition:opacity .2s ease; font-size:23px; }
+        .profile-photo-overlay small { font-size:12px; font-weight:700; }
+        .profile-photo-trigger:hover .profile-photo-overlay, .profile-photo-trigger:focus-visible .profile-photo-overlay { opacity:1; }
+        .profile-avatar-photo { overflow:hidden; padding:0; }
+        .profile-hero h2 { margin:0 0 7px; color:#142b52; }
+        .profile-hero p { margin:0 0 10px; color:#64748b; font-size:14px; }
+        .profile-active { display:inline-flex; align-items:center; gap:6px; padding:6px 10px; border-radius:999px; background:#dcfce7; color:#166534; font-size:11px; font-weight:700; }
+        .profile-grid { display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:22px; }
+        .profile-card { padding:25px; border:1px solid #e5eaf2; border-radius:18px; background:#fff; }
+        .profile-card-heading { display:flex; align-items:center; gap:12px; margin-bottom:22px; }
+        .profile-card-icon { display:flex; align-items:center; justify-content:center; width:43px; height:43px; border-radius:13px; background:#eff6ff; color:#2563eb; font-size:18px; }
+        .profile-card-heading h3 { margin:0 0 5px; color:#142b52; font-size:17px; }
+        .profile-card-heading p { margin:0; color:#64748b; font-size:12px; }
+        .profile-field { margin-bottom:17px; }
+        .profile-field label { display:block; margin-bottom:8px; color:#334155; font-size:13px; font-weight:700; }
+        .profile-field input { width:100%; box-sizing:border-box; padding:12px 13px; border:1px solid #dbe3ef; border-radius:10px; background:#fff; color:#142b52; font:inherit; }
+        .profile-field input:focus { outline:2px solid #bfdbfe; border-color:#2563eb; }
+        .profile-field small, .profile-photo-editor small { display:block; margin-top:7px; color:#64748b; font-size:11px; }
+        .profile-submit, .profile-photo-button { display:inline-flex; align-items:center; justify-content:center; gap:9px; padding:12px 17px; border:0; border-radius:10px; background:#2563eb; color:#fff; font:inherit; font-size:13px; font-weight:700; cursor:pointer; }
+        .profile-photo-button { padding:10px 13px; background:#eff6ff; color:#2563eb; }
+        .profile-photo-editor form { display:flex; flex-direction:column; align-items:flex-start; gap:8px; }
+        .profile-alert { padding:14px 17px; border-radius:12px; font-size:13px; }
+        .profile-alert.success { background:#dcfce7; color:#166534; }
+        .profile-alert.error { background:#fee2e2; color:#991b1b; }
+        .profile-account-info { display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:14px; margin-top:22px; }
+        .profile-info-item { padding:16px; border:1px solid #e5eaf2; border-radius:12px; background:#f8fafc; }
+        .profile-info-item span { display:block; margin-bottom:7px; color:#64748b; font-size:12px; }
+        .profile-info-item strong { color:#142b52; font-size:13px; overflow-wrap:anywhere; }
+        @media(max-width:900px) { .profile-grid { grid-template-columns:1fr; } }
+        @media(max-width:560px) { .profile-hero { padding:19px; } .profile-hero-avatar { width:58px; height:58px; border-radius:16px; font-size:25px; } .profile-card { padding:19px; } .profile-account-info { grid-template-columns:1fr; } }
+
+        
+.admin-avatar {
+    overflow: hidden;
+    flex-shrink: 0;
+}
+
+.admin-avatar img {
+    display: block;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    border-radius: inherit;
+}
+
+/* Perbaikan foto profil pada header admin */
+.admin-header .admin-profile {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    flex-shrink: 0;
+}
+
+.admin-header .admin-profile .profile-avatar {
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 48px;
+    height: 48px;
+    min-width: 48px;
+    max-width: 48px;
+    flex: 0 0 48px;
+    padding: 0;
+    overflow: hidden;
+    border-radius: 14px;
+    box-sizing: border-box;
+}
+
+.admin-header .admin-profile .profile-avatar img {
+    position: absolute;
+    inset: 0;
+    display: block;
+    width: 100%;
+    height: 100%;
+    max-width: 100%;
+    max-height: 100%;
+    object-fit: cover;
+    border-radius: inherit;
+}
