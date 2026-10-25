@@ -435,7 +435,9 @@ function availability(array $facility): array
 
         <section class="summary-grid cols-3">
             <article class="summary-card">
-                <span class="summary-icon purple">▣</span>
+               <span class="summary-icon purple">
+                    <i class="fa-solid fa-building"></i>
+                </span>
                 <div>
                     <p>Total Fasilitas</p>
                     <strong><?= (int) $counts["total"] ?></strong>
@@ -443,7 +445,9 @@ function availability(array $facility): array
             </article>
 
             <article class="summary-card">
-                <span class="summary-icon green">✓</span>
+               <span class="summary-icon green">
+                    <i class="fa-solid fa-circle-check"></i>
+                </span>
                 <div>
                     <p>Fasilitas Aktif</p>
                     <strong><?= (int) $counts["active_total"] ?></strong>
@@ -451,7 +455,9 @@ function availability(array $facility): array
             </article>
 
             <article class="summary-card">
-                <span class="summary-icon orange">◷</span>
+                <span class="summary-icon orange">
+                    <i class="fa-solid fa-ban"></i>
+                </span>
                 <div>
                     <p>Fasilitas Nonaktif</p>
                     <strong><?= (int) $counts["inactive_total"] ?></strong>

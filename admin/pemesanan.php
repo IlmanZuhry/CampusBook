@@ -301,7 +301,9 @@ $backValue = http_build_query($page > 1 ? $activeFilters + ["page" => $page] : $
 
         <section class="summary-grid">
             <article class="summary-card">
-                <span class="summary-icon blue">▤</span>
+                <span class="summary-icon blue">
+                    <i class="fa-solid fa-calendar-check"></i>
+                </span>
                 <div>
                     <p>Total Pemesanan</p>
                     <strong><?= (int) $stats["total"] ?></strong>
@@ -309,7 +311,9 @@ $backValue = http_build_query($page > 1 ? $activeFilters + ["page" => $page] : $
             </article>
 
             <article class="summary-card">
-                <span class="summary-icon green">▦</span>
+                <span class="summary-icon green">
+                    <i class="fa-solid fa-calendar-day"></i>
+                </span>
                 <div>
                     <p>Pemesanan Hari Ini</p>
                     <strong><?= (int) $stats["today_total"] ?></strong>
@@ -317,7 +321,9 @@ $backValue = http_build_query($page > 1 ? $activeFilters + ["page" => $page] : $
             </article>
 
             <article class="summary-card">
-                <span class="summary-icon orange">◷</span>
+                <span class="summary-icon orange">
+                    <i class="fa-solid fa-clock"></i>
+                </span>
                 <div>
                     <p>Menunggu Persetujuan</p>
                     <strong><?= (int) $stats["pending_total"] ?></strong>
@@ -325,7 +331,9 @@ $backValue = http_build_query($page > 1 ? $activeFilters + ["page" => $page] : $
             </article>
 
             <article class="summary-card">
-                <span class="summary-icon red">◇</span>
+                <span class="summary-icon pink">
+                    <i class="fa-solid fa-wallet"></i>
+                </span>
                 <div>
                     <p>Pendapatan Bulan Ini</p>
                     <strong><?= e(rupiah($revenue)) ?></strong>

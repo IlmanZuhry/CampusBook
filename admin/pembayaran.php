@@ -341,7 +341,9 @@ $backValue = http_build_query($page > 1 ? $activeFilters + ["page" => $page] : $
 
         <section class="summary-grid">
             <article class="summary-card">
-                <span class="summary-icon blue">◇</span>
+                <span class="summary-icon blue">
+                    <i class="fa-solid fa-wallet"></i>
+                </span>
                 <div>
                     <p>Total Pendapatan</p>
                     <strong><?= e(rupiah($stats["revenue"])) ?></strong>
@@ -349,7 +351,9 @@ $backValue = http_build_query($page > 1 ? $activeFilters + ["page" => $page] : $
             </article>
 
             <article class="summary-card">
-                <span class="summary-icon orange">◷</span>
+                <span class="summary-icon orange">
+                    <i class="fa-solid fa-clock"></i>
+                </span>
                 <div>
                     <p>Menunggu Verifikasi</p>
                     <strong><?= (int) $stats["pending_total"] ?></strong>
@@ -357,7 +361,9 @@ $backValue = http_build_query($page > 1 ? $activeFilters + ["page" => $page] : $
             </article>
 
             <article class="summary-card">
-                <span class="summary-icon green">✓</span>
+                <span class="summary-icon green">
+                    <i class="fa-solid fa-circle-check"></i>
+                </span>
                 <div>
                     <p>Pembayaran Lunas</p>
                     <strong><?= (int) $stats["paid_total"] ?></strong>
@@ -365,7 +371,9 @@ $backValue = http_build_query($page > 1 ? $activeFilters + ["page" => $page] : $
             </article>
 
             <article class="summary-card">
-                <span class="summary-icon red">!</span>
+                <span class="summary-icon pink">
+                    <i class="fa-solid fa-circle-xmark"></i>
+                </span>
                 <div>
                     <p>Pembayaran Gagal</p>
                     <strong><?= (int) $stats["failed_total"] ?></strong>
@@ -380,9 +388,7 @@ $backValue = http_build_query($page > 1 ? $activeFilters + ["page" => $page] : $
                     <p>Pembayaran yang menunggu verifikasi ditampilkan paling atas.</p>
                 </div>
 
-                <button type="button" class="btn btn-primary" id="openCreateModal">
-                    + Catat Pembayaran
-                </button>
+                
             </div>
 
             <form method="GET" class="toolbar">

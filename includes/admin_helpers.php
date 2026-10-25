@@ -228,9 +228,36 @@ function badge(string $label, string $class): string
 
 /* ---------- Komponen halaman ---------- */
 
+
 function render_admin_header(string $eyebrow, string $title, string $description): void
 {
-    $initial = strtoupper(substr($_SESSION["name"] ?? "A", 0, 1));
+    global $conn;
+
+    $adminName = $_SESSION["name"] ?? "Administrator";
+    $adminPhoto = null;
+
+    if (isset($conn, $_SESSION["user_id"])) {
+        $stmt = $conn->prepare(
+            "SELECT profile_photo FROM admins WHERE id = ? LIMIT 1"
+        );
+
+        if ($stmt) {
+            $adminId = (int) $_SESSION["user_id"];
+            $stmt->bind_param("i", $adminId);
+            $stmt->execute();
+
+            $result = $stmt->get_result();
+            $row = $result->fetch_assoc();
+
+            if ($row) {
+                $adminPhoto = $row["profile_photo"] ?? null;
+            }
+
+            $stmt->close();
+        }
+    }
+
+    $initial = strtoupper(substr($adminName, 0, 1));
     ?>
     <header class="admin-header">
         <div class="header-heading">
@@ -240,9 +267,19 @@ function render_admin_header(string $eyebrow, string $title, string $description
         </div>
 
         <div class="admin-profile">
-            <div class="profile-avatar"><?= e($initial) ?></div>
+            <div class="profile-avatar admin-avatar">
+                <?php if (!empty($adminPhoto)): ?>
+                    <img
+                        src="../assets/uploads/profile/<?= rawurlencode(basename($adminPhoto)) ?>"
+                        alt="Foto profil admin"
+                    >
+                <?php else: ?>
+                    <?= e($initial) ?>
+                <?php endif; ?>
+            </div>
+
             <div class="profile-info">
-                <strong><?= e($_SESSION["name"] ?? "Administrator") ?></strong>
+                <strong><?= e($adminName) ?></strong>
                 <span>Administrator</span>
             </div>
         </div>

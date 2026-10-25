@@ -388,23 +388,12 @@ $inactiveStudents = (int) $counts["inactive_total"];
     <?php require_once __DIR__ . "/../includes/admin_sidebar.php"; ?>
 
     <main class="admin-main">
-        <header class="admin-header">
-            <div class="header-heading">
-                <span class="header-eyebrow">MANAJEMEN PENGGUNA</span>
-                <h1>Data Mahasiswa</h1>
-                <p>Kelola akun mahasiswa yang dapat menggunakan CampusBook.</p>
-            </div>
+        <?php
+        $pageTitle = "Data Mahasiswa";
+        $pageDescription = "Kelola data dan akun mahasiswa CampusBook.";
 
-            <div class="admin-profile">
-                <div class="profile-avatar">
-                    <?= e(strtoupper(substr($_SESSION["name"] ?? "A", 0, 1))) ?>
-                </div>
-                <div class="profile-info">
-                    <strong><?= e($_SESSION["name"] ?? "Administrator") ?></strong>
-                    <span>Administrator</span>
-                </div>
-            </div>
-        </header>
+        require_once __DIR__ . "/../includes/admin_header.php";
+        ?>
 
         <?php if ($success !== ""): ?>
             <div class="student-alert success"><?= e($success) ?></div>
@@ -416,15 +405,21 @@ $inactiveStudents = (int) $counts["inactive_total"];
 
         <section class="student-stats">
             <article class="student-stat">
-                <span class="student-stat-icon blue">♙</span>
+                
+                <span class="student-stat-icon blue">
+                    <i class="fa-solid fa-users"></i>
+                </span>
                 <div>
                     <p>Total Mahasiswa</p>
                     <h2><?= $totalStudents ?></h2>
                 </div>
+
             </article>
 
-            <article class="student-stat">
-                <span class="student-stat-icon green">✓</span>
+            <article class="student-stat"> 
+                <span class="student-stat-icon green">
+                    <i class="fa-solid fa-user-check"></i>
+                </span>
                 <div>
                     <p>Akun Aktif</p>
                     <h2><?= $activeStudents ?></h2>
@@ -432,7 +427,9 @@ $inactiveStudents = (int) $counts["inactive_total"];
             </article>
 
             <article class="student-stat">
-                <span class="student-stat-icon orange">◷</span>
+                <span class="student-stat-icon orange">
+                    <i class="fa-solid fa-user-xmark"></i>
+                </span>
                 <div>
                     <p>Akun Nonaktif</p>
                     <h2><?= $inactiveStudents ?></h2>

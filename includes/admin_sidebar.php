@@ -61,6 +61,17 @@ $currentPage = basename($_SERVER["PHP_SELF"]);
             </span>
             <span>Notifikasi</span>
         </a>
+        <div class="sidebar-label" style="margin-top: 24px;">
+            AKUN
+        </div>
+
+        <a href="profil.php"
+           class="sidebar-link <?= $currentPage === 'profil.php' ? 'active' : '' ?>">
+            <span class="nav-icon">
+                <i class="fa-solid fa-user"></i>
+            </span>
+            <span>Profil Saya</span>
+        </a>
     </nav>
 
     <div class="sidebar-bottom">
