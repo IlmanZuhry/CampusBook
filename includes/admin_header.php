@@ -2,7 +2,7 @@
 <header class="admin-header">
     <div class="header-heading">
         <span class="header-eyebrow">CAMPUSBOOK ADMINISTRATION</span>
-        <h1>Dashboard</h1>
+        <h1>Beranda</h1>
         <p>Ringkasan aktivitas dan pengelolaan fasilitas kampus.</p>
     </div>
 
