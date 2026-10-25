@@ -788,3 +788,79 @@ button.sidebar-link:hover {
     object-fit: cover;
     border-radius: inherit;
 }
+
+.success-popup-overlay {
+    position: fixed;
+    inset: 0;
+    z-index: 99999;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+    background: rgba(15, 23, 42, 0.55);
+    backdrop-filter: blur(4px);
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 0.25s ease, visibility 0.25s ease;
+}
+
+.success-popup-overlay.show {
+    opacity: 1;
+    visibility: visible;
+}
+
+.success-popup {
+    width: 100%;
+    max-width: 390px;
+    padding: 30px 26px;
+    text-align: center;
+    background: #fff;
+    border-radius: 20px;
+    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.2);
+    transform: translateY(15px) scale(0.96);
+    transition: transform 0.25s ease;
+}
+
+.success-popup-overlay.show .success-popup {
+    transform: translateY(0) scale(1);
+}
+
+.success-popup-icon {
+    width: 76px;
+    height: 76px;
+    margin: 0 auto 18px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #16a34a;
+    background: #dcfce7;
+    border-radius: 50%;
+}
+
+.success-popup h3 {
+    margin: 0 0 10px;
+    color: #166534;
+    font-size: 24px;
+}
+
+.success-popup p {
+    margin: 0 0 24px;
+    color: #64748b;
+    line-height: 1.6;
+}
+
+.success-popup button {
+    width: 100%;
+    padding: 12px;
+    border: none;
+    border-radius: 10px;
+    background: #16a34a;
+    color: #fff;
+    font-size: 15px;
+    font-weight: 600;
+    cursor: pointer;
+}
+
+.success-popup button:hover {
+    background: #15803d;
+}
