@@ -347,6 +347,13 @@ $backValue = http_build_query($page > 1 ? $activeFilters + ["page" => $page] : $
                     <h2>Daftar Pemesanan</h2>
                     <p>Permohonan yang menunggu persetujuan ditampilkan paling atas.</p>
                 </div>
+                 <a class="btn btn-primary"
+                href="laporan_pemesanan.php<?= $activeFilters ? '?' . e(http_build_query($activeFilters)) : '' ?>"
+                target="_blank"
+                rel="noopener">
+                    <i class="fa-solid fa-file-pdf"></i>
+                    Cetak Laporan PDF
+                </a>
             </div>
 
             <form method="GET" class="toolbar">
