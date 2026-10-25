@@ -569,6 +569,28 @@ $backValue = http_build_query($page > 1 ? $activeFilters + ["page" => $page] : $
 
 <script>
 document.addEventListener("DOMContentLoaded", function () {
+    function openModal(id) {
+    const modal = document.getElementById(id);
+
+    if (!modal) {
+        console.error("Modal tidak ditemukan:", id);
+        return;
+    }
+
+    modal.classList.add("show");
+    modal.setAttribute("aria-hidden", "false");
+    document.body.classList.add("modal-open");
+}
+
+function closeModal(id) {
+    const modal = document.getElementById(id);
+
+    if (!modal) return;
+
+    modal.classList.remove("show");
+    modal.setAttribute("aria-hidden", "true");
+    document.body.classList.remove("modal-open");
+}
     const text = function (id, value) {
         document.getElementById(id).textContent = value && value !== "" ? value : "-";
     };
@@ -618,6 +640,20 @@ document.addEventListener("DOMContentLoaded", function () {
             openModal("reasonModal");
         });
     });
+    // Tombol tutup modal dan klik area di luar modal
+        document.querySelectorAll("[data-close-modal]").forEach(function (button) {
+            button.addEventListener("click", function () {
+                closeModal(button.dataset.closeModal);
+            });
+        });
+
+        document.querySelectorAll(".app-modal").forEach(function (modal) {
+            modal.addEventListener("click", function (event) {
+                if (event.target === modal) {
+                    closeModal(modal.id);
+                }
+            });
+        });
 });
 </script>
 

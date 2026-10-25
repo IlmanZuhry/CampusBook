@@ -325,12 +325,6 @@ $stmt->close();
             <?php endif; ?>
 
             <div class="catalog-heading">
-                <div>
-                    <span class="catalog-eyebrow">CAMPUS FACILITIES</span>
-                    <h2>Jelajahi Fasilitas</h2>
-                    <p>Temukan fasilitas kampus yang sesuai dengan kebutuhan kegiatanmu.</p>
-                </div>
-
                 <div class="catalog-count">
                     <strong><?= count($facilities) ?></strong>
                     fasilitas ditemukan
