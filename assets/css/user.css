@@ -628,3 +628,19 @@
         align-items: flex-start;
     }
 }
+
+.student-facility-photo {
+    display: block;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: center;
+    position: absolute;
+    inset: 0;
+    border-radius: inherit;
+}
+
+.student-facility-image {
+    position: relative;
+    overflow: hidden;
+}

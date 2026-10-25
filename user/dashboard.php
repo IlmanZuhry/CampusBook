@@ -84,10 +84,12 @@ $pendingPayments = dashboardCount(
 // Fasilitas aktif, diurutkan berdasarkan jumlah pemesanan
 $facilities = [];
 
+
 $sqlFacilities = "
     SELECT
         f.id,
         f.name,
+        f.image,
         f.description,
         f.location,
         f.capacity,
@@ -99,11 +101,12 @@ $sqlFacilities = "
         AND b.status IN ('approved', 'completed')
     WHERE f.status = 'active'
     GROUP BY
-        f.id, f.name, f.description, f.location,
-        f.capacity, f.hourly_rate
+        f.id, f.name, f.image, f.description,
+        f.location, f.capacity, f.hourly_rate
     ORDER BY booking_count DESC, f.name ASC
     LIMIT 4
 ";
+
 
 $resultFacilities = $conn->query($sqlFacilities);
 
@@ -264,12 +267,33 @@ function rupiahDashboard($amount): string
                             ?>
 
                             <article class="student-facility-card">
+                                
                                 <div class="student-facility-image facility-tone-<?= $index + 1 ?>">
-                                    <i class="fas <?= $facilityIcon ?>"></i>
+
+                                    <?php if (!empty($facility["image"])): ?>
+                                        <img
+                                            src="../assets/uploads/facilities/<?= htmlspecialchars(
+                                                $facility["image"],
+                                                ENT_QUOTES,
+                                                "UTF-8"
+                                            ) ?>"
+                                            alt="<?= htmlspecialchars(
+                                                $facility["name"],
+                                                ENT_QUOTES,
+                                                "UTF-8"
+                                            ) ?>"
+                                            class="student-facility-photo"
+                                        >
+                                    <?php else: ?>
+                                        <i class="fas <?= $facilityIcon ?>"></i>
+                                    <?php endif; ?>
+
                                     <span class="facility-status">
                                         <i class="fas fa-circle"></i> Tersedia
                                     </span>
+
                                 </div>
+
 
                                 <div class="student-facility-body">
                                     <h3>

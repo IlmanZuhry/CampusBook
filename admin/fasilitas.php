@@ -680,6 +680,35 @@ function availability(array $facility): array
 
 <script>
 document.addEventListener("DOMContentLoaded", function () {
+    function openModal(modalId) {
+        const modal = document.getElementById(modalId);
+
+        if (!modal) {
+            console.error("Modal tidak ditemukan:", modalId);
+            return;
+        }
+
+        modal.classList.add("show");
+        modal.setAttribute("aria-hidden", "false");
+        document.body.classList.add("modal-open");
+    }
+
+    function closeModal(modalId) {
+        const modal = document.getElementById(modalId);
+
+        if (!modal) return;
+
+        modal.classList.remove("show");
+        modal.setAttribute("aria-hidden", "true");
+        document.body.classList.remove("modal-open");
+    }
+    
+document.querySelectorAll("[data-close-modal]").forEach(function (button) {
+    button.addEventListener("click", function () {
+        closeModal(button.dataset.closeModal);
+    });
+});
+
     const f = {
         action: document.getElementById("facilityAction"),
         id: document.getElementById("facilityId"),
