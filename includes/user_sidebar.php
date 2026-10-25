@@ -14,31 +14,41 @@ $currentPage = basename($_SERVER["PHP_SELF"]);
     <nav class="sidebar-nav">
         <a href="dashboard.php"
            class="sidebar-link <?= $currentPage === 'dashboard.php' ? 'active' : '' ?>">
-            <span class="nav-icon">▦</span>
+            <span class="nav-icon">
+                <i class="fa-solid fa-house"></i>
+            </span>
             <span>Beranda</span>
         </a>
 
         <a href="fasilitas.php"
            class="sidebar-link <?= $currentPage === 'fasilitas.php' ? 'active' : '' ?>">
-            <span class="nav-icon">▣</span>
+            <span class="nav-icon">
+                <i class="fa-solid fa-building"></i>
+            </span>
             <span>Fasilitas</span>
         </a>
 
         <a href="pemesanan.php"
            class="sidebar-link <?= $currentPage === 'pemesanan.php' ? 'active' : '' ?>">
-            <span class="nav-icon">▤</span>
+            <span class="nav-icon">
+                <i class="fa-solid fa-calendar-check"></i>
+            </span>
             <span>Pemesanan Saya</span>
         </a>
 
         <a href="pembayaran.php"
            class="sidebar-link <?= $currentPage === 'pembayaran.php' ? 'active' : '' ?>">
-            <span class="nav-icon">◇</span>
+            <span class="nav-icon">
+                <i class="fa-solid fa-credit-card"></i>
+            </span>
             <span>Pembayaran</span>
         </a>
 
         <a href="notifikasi.php"
            class="sidebar-link <?= $currentPage === 'notifikasi.php' ? 'active' : '' ?>">
-            <span class="nav-icon">♧</span>
+            <span class="nav-icon">
+                <i class="fa-solid fa-bell"></i>
+            </span>
             <span>Notifikasi</span>
         </a>
 
@@ -48,15 +58,20 @@ $currentPage = basename($_SERVER["PHP_SELF"]);
 
         <a href="profil.php"
            class="sidebar-link <?= $currentPage === 'profil.php' ? 'active' : '' ?>">
-            <span class="nav-icon">♙</span>
+            <span class="nav-icon">
+                <i class="fa-solid fa-user"></i>
+            </span>
             <span>Profil Saya</span>
         </a>
     </nav>
 
     <div class="sidebar-bottom">
-        <button type="button" class="sidebar-link logout-link"
+        <button type="button"
+                class="sidebar-link logout-link"
                 id="openUserLogoutModal">
-            <span class="nav-icon">↪</span>
+            <span class="nav-icon">
+                <i class="fa-solid fa-right-from-bracket"></i>
+            </span>
             <span>Keluar</span>
         </button>
     </div>
@@ -68,7 +83,9 @@ $currentPage = basename($_SERVER["PHP_SELF"]);
              aria-labelledby="userLogoutTitle"
              aria-describedby="userLogoutDescription">
 
-            <div class="logout-modal-icon">↪</div>
+            <div class="logout-modal-icon">
+                <i class="fa-solid fa-right-from-bracket"></i>
+            </div>
 
             <h2 id="userLogoutTitle">Konfirmasi Logout</h2>
 
@@ -77,7 +94,8 @@ $currentPage = basename($_SERVER["PHP_SELF"]);
             </p>
 
             <div class="logout-modal-actions">
-                <button type="button" class="logout-cancel"
+                <button type="button"
+                        class="logout-cancel"
                         id="cancelUserLogout">
                     Batal
                 </button>
@@ -114,7 +132,9 @@ $currentPage = basename($_SERVER["PHP_SELF"]);
     cancelButton.addEventListener("click", hideModal);
 
     modal.addEventListener("click", function (event) {
-        if (event.target === modal) hideModal();
+        if (event.target === modal) {
+            hideModal();
+        }
     });
 
     document.addEventListener("keydown", function (event) {

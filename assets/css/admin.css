@@ -623,3 +623,80 @@ button.sidebar-link:hover {
         gap: 8px;
     }
 }
+.recent-booking-list {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .recent-booking-row {
+            display: grid;
+            grid-template-columns: 1.1fr 1.2fr 1fr 1fr auto;
+            align-items: center;
+            gap: 16px;
+            padding: 18px 24px;
+            border-top: 1px solid #e8edf5;
+        }
+
+        .recent-booking-row:first-child {
+            border-top: 0;
+        }
+
+        .recent-booking-row strong,
+        .recent-booking-row small {
+            display: block;
+            overflow-wrap: anywhere;
+        }
+
+        .recent-booking-row small {
+            margin-top: 5px;
+            color: #64748b;
+        }
+
+        .booking-status {
+            display: inline-flex;
+            justify-content: center;
+            padding: 6px 10px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 700;
+            white-space: nowrap;
+            background: #f1f5f9;
+            color: #475569;
+        }
+
+        .booking-status.pending {
+            background: #fff4db;
+            color: #a16207;
+        }
+
+        .booking-status.approved,
+        .booking-status.completed {
+            background: #dcfce7;
+            color: #15803d;
+        }
+
+        .booking-status.rejected,
+        .booking-status.cancelled {
+            background: #fee2e2;
+            color: #b91c1c;
+        }
+
+        .recent-booking-empty {
+            padding: 36px 24px;
+            text-align: center;
+            color: #64748b;
+        }
+
+        @media (max-width: 900px) {
+            .recent-booking-row {
+                grid-template-columns: repeat(2, minmax(0, 1fr));
+            }
+        }
+
+        @media (max-width: 520px) {
+            .recent-booking-row {
+                grid-template-columns: 1fr;
+                gap: 12px;
+                padding: 18px;
+            }
+        }
